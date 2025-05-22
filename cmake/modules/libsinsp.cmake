@@ -13,6 +13,11 @@ if(DEFINED LIBSINSP_USER_AGENT)
 	add_definitions(-DLIBSINSP_USER_AGENT="${LIBSINSP_USER_AGENT}")
 endif()
 
+if(ENABLE_PIC)
+	set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+	message(STATUS "Building libsinsp with position independent code")
+endif()
+
 include(ExternalProject)
 include(libscap)
 if (NOT EMSCRIPTEN)

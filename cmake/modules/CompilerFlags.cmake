@@ -3,6 +3,7 @@ option(BUILD_WARNINGS_AS_ERRORS "Enable building with -Wextra -Werror flags")
 option(ENABLE_PIC "Build position independent libraries and executables" ${BUILD_SHARED_LIBS})
 if(ENABLE_PIC)
 	set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+	message(STATUS "Position Independent Code (PIC) enabled")
 endif()
 
 # NOTE: do not add `add_definition` in this file because consumers project won't import it.

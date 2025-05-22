@@ -35,6 +35,13 @@ else()
 		set(CPPFLAGS -D_REENTRANT)
 	endif()
 
+	if(ENABLE_PIC)
+		message(STATUS "Building jq with position independent code")
+		set(JQ_PIC_OPTION "--with-pic")
+	else()
+		set(JQ_PIC_OPTION "")
+	endif()
+
 	if(NOT TARGET jq)
 		message(STATUS "Bundled jq: include: ${JQ_INCLUDE}, lib: ${JQ_LIB}")
 
@@ -58,7 +65,7 @@ else()
 			PREFIX "${PROJECT_BINARY_DIR}/jq-prefix"
 			URL "https://download.falco.org/dependencies/jq-1.6.tar.gz"
 			URL_HASH "SHA256=787518068c35e244334cc79b8e56b60dbab352dff175b7f04a94f662b540bfd9"
-			CONFIGURE_COMMAND CPPFLAGS=${CPPFLAGS} ./configure --disable-maintainer-mode ${JQ_STATIC_OPTION} --disable-dependency-tracking --with-oniguruma=builtin --prefix=${JQ_INSTALL_DIR}
+			CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env "CPPFLAGS=${CPPFLAGS}" ./configure --disable-maintainer-mode ${JQ_STATIC_OPTION} ${JQ_PIC_OPTION} --disable-dependency-tracking --with-oniguruma=builtin --prefix=${JQ_INSTALL_DIR}
                         BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} clean all LDFLAGS=${JQ_LDFLAGS}
 			BUILD_IN_SOURCE 1
 			BUILD_BYPRODUCTS ${JQ_LIB} ${ONIGURUMA_LIB}
