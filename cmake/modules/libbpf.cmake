@@ -18,6 +18,13 @@ else()
     set(LIBBPF_BUILD_DIR "${LIBBPF_SRC}/libbpf-build")
     set(LIBBPF_INCLUDE "${LIBBPF_BUILD_DIR}/root/usr/include")
     set(LIBBPF_LIB "${LIBBPF_BUILD_DIR}/root/usr/lib64/libbpf.a")
+    
+    # Set up extra CFLAGS for libelf
+    set(LIBBPF_EXTRA_CFLAGS "-I${LIBELF_INCLUDE} -I${ZLIB_INCLUDE}")
+    if(ENABLE_PIC)
+        set(LIBBPF_EXTRA_CFLAGS "-fPIC ${LIBBPF_EXTRA_CFLAGS}")
+    endif()
+    
     ExternalProject_Add(
         libbpf
         PREFIX "${PROJECT_BINARY_DIR}/libbpf-prefix"
@@ -26,7 +33,7 @@ else()
         URL_HASH
         "SHA256=32b0c41eabfbbe8e0c8aea784d7495387ff9171b5a338480a8fbaceb9da8d5e5"
         CONFIGURE_COMMAND mkdir -p build root
-        BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} BUILD_STATIC_ONLY=y OBJDIR=${LIBBPF_BUILD_DIR}/build DESTDIR=${LIBBPF_BUILD_DIR}/root NO_PKG_CONFIG=1 "EXTRA_CFLAGS=-fPIC -I${LIBELF_INCLUDE} -I${ZLIB_INCLUDE}" "LDFLAGS=-Wl,-Bstatic" "EXTRA_LDFLAGS=-L${LIBELF_SRC}/libelf/libelf -L${ZLIB_SRC}" -C ${LIBBPF_SRC}/libbpf/src install install_uapi_headers
+        BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} BUILD_STATIC_ONLY=y OBJDIR=${LIBBPF_BUILD_DIR}/build DESTDIR=${LIBBPF_BUILD_DIR}/root NO_PKG_CONFIG=1 "EXTRA_CFLAGS=${LIBBPF_EXTRA_CFLAGS}" "LDFLAGS=-Wl,-Bstatic" "EXTRA_LDFLAGS=-L${LIBELF_SRC}/libelf/libelf -L${ZLIB_SRC}" -C ${LIBBPF_SRC}/libbpf/src install install_uapi_headers
         INSTALL_COMMAND ""
         UPDATE_COMMAND ""
     )

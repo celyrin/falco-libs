@@ -18,6 +18,11 @@ include(CheckSymbolExists)
 check_symbol_exists(strlcpy "string.h" HAVE_STRLCPY)
 check_symbol_exists(strlcat "string.h" HAVE_STRLCAT)
 
+if(ENABLE_PIC)
+	set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+	message(STATUS "Building libscap with position independent code")
+endif()
+
 if(HAVE_STRLCPY)
 	message(STATUS "Existing strlcpy found, will *not* use local definition")
 else()

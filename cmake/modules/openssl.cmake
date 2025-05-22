@@ -16,6 +16,14 @@ else()
 		set(OPENSSL_LIB_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
 		set(OPENSSL_SHARED_OPTION no-shared)
 	endif()
+	
+	# Configure PIC option
+	if(ENABLE_PIC)
+		set(OPENSSL_PIC_OPTION "-fPIC")
+	else()
+		set(OPENSSL_PIC_OPTION "")
+	endif()
+	
 	set(OPENSSL_BUNDLE_DIR "${PROJECT_BINARY_DIR}/openssl-prefix/src/openssl")
 	set(OPENSSL_INSTALL_DIR "${OPENSSL_BUNDLE_DIR}/target")
 	set(OPENSSL_INCLUDE_DIR "${PROJECT_BINARY_DIR}/openssl-prefix/src/openssl/include/")
@@ -30,7 +38,7 @@ else()
 			PREFIX "${PROJECT_BINARY_DIR}/openssl-prefix"
 			URL "https://github.com/openssl/openssl/releases/download/openssl-3.1.2/openssl-3.1.2.tar.gz"
 			URL_HASH "SHA256=a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6767d6539"
-			CONFIGURE_COMMAND ./config ${OPENSSL_SHARED_OPTION} --prefix=${OPENSSL_INSTALL_DIR} --libdir=lib
+			CONFIGURE_COMMAND ./config ${OPENSSL_SHARED_OPTION} ${OPENSSL_PIC_OPTION} --prefix=${OPENSSL_INSTALL_DIR} --libdir=lib
                         BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
 			BUILD_IN_SOURCE 1
 			BUILD_BYPRODUCTS ${OPENSSL_LIBRARY_SSL} ${OPENSSL_LIBRARY_CRYPTO}

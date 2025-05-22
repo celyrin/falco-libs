@@ -47,6 +47,7 @@ else()
 						-DJSONCPP_WITH_POST_BUILD_UNITTEST=Off
 						-DCMAKE_INSTALL_PREFIX=${JSONCPP_SRC}
 						-DCMAKE_INSTALL_LIBDIR=lib
+						-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=${ENABLE_PIC}
 			)
 		else()
 			# see: https://cmake.org/cmake/help/latest/policy/CMP0091.html
@@ -67,6 +68,7 @@ else()
 						-DJSONCPP_WITH_POST_BUILD_UNITTEST=Off
 						-DCMAKE_INSTALL_PREFIX=${JSONCPP_SRC}
 						-DCMAKE_INSTALL_LIBDIR=lib
+						-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=${ENABLE_PIC}
 				)
 			else()
 				ExternalProject_Add(
@@ -85,6 +87,7 @@ else()
 						-DJSONCPP_WITH_POST_BUILD_UNITTEST=Off
 						-DCMAKE_INSTALL_PREFIX=${JSONCPP_SRC}
 						-DCMAKE_INSTALL_LIBDIR=lib
+						-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=${ENABLE_PIC}
 				)
 			endif()
 		endif()

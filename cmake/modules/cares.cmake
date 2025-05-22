@@ -25,13 +25,20 @@ else()
 	set(CARES_LIB "${CARES_SRC}/target/lib/libcares${CARES_LIB_SUFFIX}")
 	set(CARES_INSTALL_DIR "${CARES_SRC}/target")
 
+	if(ENABLE_PIC)
+		message(STATUS "Building c-ares with position independent code")
+		set(CARES_PIC_OPTION "--with-pic")
+	else()
+		set(CARES_PIC_OPTION "")
+	endif()
+
 	if(NOT TARGET c-ares)
 		message(STATUS "Using bundled c-ares in '${CARES_SRC}'")
 		ExternalProject_Add(c-ares
 			PREFIX "${PROJECT_BINARY_DIR}/c-ares-prefix"
-			URL "https://c-ares.haxx.se/download/c-ares-1.19.1.tar.gz"
+			URL "https://github.com/c-ares/c-ares/releases/download/cares-1_19_1/c-ares-1.19.1.tar.gz"
 			URL_HASH "SHA256=321700399b72ed0e037d0074c629e7741f6b2ec2dda92956abe3e9671d3e268e"
-			CONFIGURE_COMMAND CPPFLAGS=${CARES_CPPFLAGS} ./configure ${CARES_STATIC_OPTION} --prefix=${CARES_INSTALL_DIR}
+			CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env "CPPFLAGS=${CARES_CPPFLAGS}" ./configure ${CARES_STATIC_OPTION} ${CARES_PIC_OPTION} --prefix=${CARES_INSTALL_DIR}
                         BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
 			BUILD_IN_SOURCE 1
 			BUILD_BYPRODUCTS ${CARES_INCLUDE} ${CARES_LIB}

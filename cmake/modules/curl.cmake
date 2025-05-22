@@ -23,6 +23,13 @@ else()
 	set(CURL_INCLUDE_DIRS "${CURL_BUNDLE_DIR}/include/")
 	set(CURL_LIBRARIES "${CURL_BUNDLE_DIR}/lib/.libs/libcurl${CURL_LIB_SUFFIX}")
 
+	# Set the fPIC option if enabled
+	if(ENABLE_PIC)
+		set(CURL_PIC_OPTION "--with-pic")
+	else()
+		set(CURL_PIC_OPTION "")
+	endif()
+
 	if(NOT USE_BUNDLED_OPENSSL)
 		set(CURL_SSL_OPTION "--with-ssl")
 	else()
@@ -50,6 +57,7 @@ else()
 			${CURL_SSL_OPTION}
 			${CURL_ZLIB_OPTION}
 			${CURL_STATIC_OPTION}
+			${CURL_PIC_OPTION}
 			--enable-optimize
 			--disable-curldebug
 			--disable-rt
