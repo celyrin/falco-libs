@@ -20,9 +20,9 @@ else()
 		set(PROTOBUF_CONFIGURE_FLAGS --disable-shared --enable-static)
 	endif()
 	
-	# Add fPIC flag if ENABLE_PIC is ON
+	set(PROTOBUF_PIC_OPTION "")
 	if(ENABLE_PIC)
-		set(PROTOBUF_CONFIGURE_FLAGS "${PROTOBUF_CONFIGURE_FLAGS} --with-pic")
+		set(PROTOBUF_PIC_OPTION "--with-pic")
 	endif()
 	
 	include(zlib)
@@ -42,7 +42,7 @@ else()
 			URL "https://github.com/protocolbuffers/protobuf/releases/download/v3.17.3/protobuf-cpp-3.17.3.tar.gz"
 			URL_HASH "SHA256=51cec99f108b83422b7af1170afd7aeb2dd77d2bcbb7b6bad1f92509e9ccf8cb"
 			# TODO what if using system zlib?
-			CONFIGURE_COMMAND CPPFLAGS=-I${ZLIB_INCLUDE} LDFLAGS=-L${ZLIB_SRC} ./configure --with-zlib ${PROTOBUF_CONFIGURE_FLAGS} --prefix=${PROTOBUF_INSTALL_DIR}
+			CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env "CPPFLAGS=-I${ZLIB_INCLUDE}" "LDFLAGS=-L${ZLIB_SRC}" ./configure --with-zlib ${PROTOBUF_CONFIGURE_FLAGS} ${PROTOBUF_PIC_OPTION} --prefix=${PROTOBUF_INSTALL_DIR}
                         BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
 			BUILD_IN_SOURCE 1
 			BUILD_BYPRODUCTS ${PROTOC} ${PROTOBUF_INCLUDE} ${PROTOBUF_LIB}
