@@ -27,7 +27,9 @@ else()
 
 	if(ENABLE_PIC)
 		message(STATUS "Building c-ares with position independent code")
-		set(CARES_CPPFLAGS "${CARES_CPPFLAGS} -fPIC")
+		set(CARES_PIC_OPTION "--with-pic")
+	else()
+		set(CARES_PIC_OPTION "")
 	endif()
 
 	if(NOT TARGET c-ares)
@@ -36,7 +38,7 @@ else()
 			PREFIX "${PROJECT_BINARY_DIR}/c-ares-prefix"
 			URL "https://github.com/c-ares/c-ares/releases/download/cares-1_19_1/c-ares-1.19.1.tar.gz"
 			URL_HASH "SHA256=321700399b72ed0e037d0074c629e7741f6b2ec2dda92956abe3e9671d3e268e"
-			CONFIGURE_COMMAND CPPFLAGS=${CARES_CPPFLAGS} ./configure ${CARES_STATIC_OPTION} --prefix=${CARES_INSTALL_DIR}
+			CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env "CPPFLAGS=${CARES_CPPFLAGS}" ./configure ${CARES_STATIC_OPTION} ${CARES_PIC_OPTION} --prefix=${CARES_INSTALL_DIR}
                         BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
 			BUILD_IN_SOURCE 1
 			BUILD_BYPRODUCTS ${CARES_INCLUDE} ${CARES_LIB}
