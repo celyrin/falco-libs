@@ -40,6 +40,12 @@ else()
 				set(ZLIB_LIB_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
 				set(ZLIB_CONFIGURE_FLAGS "--static")
 			endif()
+			
+			# Add -fPIC flag if ENABLE_PIC is ON
+			if(ENABLE_PIC)
+				set(ZLIB_CONFIGURE_FLAGS "${ZLIB_CONFIGURE_FLAGS} CFLAGS=-fPIC")
+			endif()
+			
 			set(ZLIB_LIB "${ZLIB_SRC}/libz${ZLIB_LIB_SUFFIX}")
 			ExternalProject_Add(zlib
 				PREFIX "${PROJECT_BINARY_DIR}/zlib-prefix"

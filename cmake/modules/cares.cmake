@@ -25,6 +25,11 @@ else()
 	set(CARES_LIB "${CARES_SRC}/target/lib/libcares${CARES_LIB_SUFFIX}")
 	set(CARES_INSTALL_DIR "${CARES_SRC}/target")
 
+	if(ENABLE_PIC)
+		message(STATUS "Building c-ares with position independent code")
+		set(CARES_CPPFLAGS "${CARES_CPPFLAGS} -fPIC")
+	endif()
+
 	if(NOT TARGET c-ares)
 		message(STATUS "Using bundled c-ares in '${CARES_SRC}'")
 		ExternalProject_Add(c-ares

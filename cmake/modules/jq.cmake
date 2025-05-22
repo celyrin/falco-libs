@@ -35,6 +35,11 @@ else()
 		set(CPPFLAGS -D_REENTRANT)
 	endif()
 
+	if(ENABLE_PIC)
+		message(STATUS "Building jq with position independent code")
+		set(CPPFLAGS "${CPPFLAGS} -fPIC")
+	endif()
+
 	if(NOT TARGET jq)
 		message(STATUS "Bundled jq: include: ${JQ_INCLUDE}, lib: ${JQ_LIB}")
 

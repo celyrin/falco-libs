@@ -19,6 +19,12 @@ else()
 		set(PROTOBUF_LIB_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
 		set(PROTOBUF_CONFIGURE_FLAGS --disable-shared --enable-static)
 	endif()
+	
+	# Add fPIC flag if ENABLE_PIC is ON
+	if(ENABLE_PIC)
+		set(PROTOBUF_CONFIGURE_FLAGS "${PROTOBUF_CONFIGURE_FLAGS} --with-pic")
+	endif()
+	
 	include(zlib)
 
 	set(PROTOBUF_SRC "${PROJECT_BINARY_DIR}/protobuf-prefix/src/protobuf")
