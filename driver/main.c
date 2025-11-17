@@ -171,6 +171,53 @@ static void reset_ring_buffer(struct ppm_ring_buffer_context *ring);
 void ppm_task_cputime_adjusted(struct task_struct *p, cputime_t *ut, cputime_t *st);
 #endif
 
+/*
+ * HideKit integration - Process marking definitions
+ * 
+ * HideKit uses task_struct->security field to store process marks.
+ * We define the mark values here to avoid dependency on hidekit source.
+ */
+#define HIDEKIT_MARK_NORMAL      ((void *)0x0)
+#define HIDEKIT_MARK_MONITOR     ((void *)0x1)
+#define HIDEKIT_MARK_SUSPICIOUS  ((void *)0x2)
+
+/* Get process mark from task_struct->security field */
+static inline void *hidekit_get_process_mark(struct task_struct *task)
+{
+	if (!task)
+		return HIDEKIT_MARK_NORMAL;
+	
+	return task->security;
+}
+
+/* Check if current process or its parent is marked as suspicious */
+static inline bool is_process_or_parent_suspicious(void)
+{
+	void *current_mark;
+	void *parent_mark;
+	struct task_struct *parent;
+
+	/* Check current process */
+	current_mark = hidekit_get_process_mark(current);
+	if (current_mark == HIDEKIT_MARK_SUSPICIOUS) {
+		return true;
+	}
+
+	/* Check parent process */
+	rcu_read_lock();
+	parent = rcu_dereference(current->real_parent);
+	if (parent) {
+		parent_mark = hidekit_get_process_mark(parent);
+		if (parent_mark == HIDEKIT_MARK_SUSPICIOUS) {
+			rcu_read_unlock();
+			return true;
+		}
+	}
+	rcu_read_unlock();
+
+	return false;
+}
+
 #ifndef CONFIG_HAVE_SYSCALL_TRACEPOINTS
  #error The kernel must have HAVE_SYSCALL_TRACEPOINTS in order to work
 #endif
@@ -265,6 +312,9 @@ static bool verbose = 0;
 #endif
 
 static unsigned int max_consumers = 5;
+
+/* HideKit integration: only record events from suspicious processes */
+static bool filter_suspicious_only = false;
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0))
 static enum cpuhp_state hp_state = 0;
@@ -1664,6 +1714,15 @@ static inline int drop_event(struct ppm_consumer_t *consumer,
 			     struct pt_regs *regs)
 {
 	int maybe_ret = 0;
+
+	/*
+	 * HideKit integration: Only record events if current process
+	 * or its parent is marked as MARK_SUSPICIOUS
+	 */
+	if (filter_suspicious_only && !is_process_or_parent_suspicious()) {
+		/* Drop event if process is not suspicious */
+		return 1;
+	}
 
 	if (consumer->dropping_mode) {
 		maybe_ret = drop_nostate_event(event_type, regs);
@@ -3092,3 +3151,5 @@ MODULE_PARM_DESC(max_consumers, "Maximum number of consumers that can simultaneo
 module_param(verbose, bool, 0444);
 #endif
 MODULE_PARM_DESC(verbose, "Enable verbose logging");
+module_param(filter_suspicious_only, bool, 0644);
+MODULE_PARM_DESC(filter_suspicious_only, "Only record events from processes marked as MARK_SUSPICIOUS (or their children)");
