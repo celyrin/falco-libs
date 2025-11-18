@@ -7,8 +7,9 @@ on:
         description: 'Archlinux kernel version to build a driver against, eg: 6.2.arch1-1 or empty to build latest mainline'
         required: false
         type: string
-  schedule:
-    - cron: '0 8 * * *' # every day at 8am
+  # schedule disabled
+  # schedule:
+  #   - cron: '0 8 * * *' # every day at 8am
 
 jobs:
   build-latest-kernel:
