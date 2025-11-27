@@ -174,32 +174,38 @@ void ppm_task_cputime_adjusted(struct task_struct *p, cputime_t *ut, cputime_t *
 /*
  * HideKit integration - Process marking definitions
  * 
- * HideKit uses task_struct->security field to store process marks.
- * We define the mark values here to avoid dependency on hidekit source.
+ * HideKit uses thread_info->flags high bits (62-63) to store process marks.
  */
-#define HIDEKIT_MARK_NORMAL      ((void *)0x0)
-#define HIDEKIT_MARK_MONITOR     ((void *)0x1)
-#define HIDEKIT_MARK_SUSPICIOUS  ((void *)0x2)
+#define TIF_HIDEKIT_BIT0     62
+#define TIF_HIDEKIT_BIT1     63
+#define TIF_HIDEKIT_MASK     ((1UL << TIF_HIDEKIT_BIT0) | (1UL << TIF_HIDEKIT_BIT1))
 
-/* Get process mark from task_struct->security field */
-static inline void *hidekit_get_process_mark(struct task_struct *task)
+#define TIF_HIDEKIT_NORMAL    0
+#define TIF_HIDEKIT_MONITOR   (1UL << TIF_HIDEKIT_BIT0)
+#define TIF_HIDEKIT_SUSPICIOUS (1UL << TIF_HIDEKIT_BIT1)
+
+/* Get process mark from thread_info->flags */
+static inline unsigned long hidekit_get_process_mark(struct task_struct *task)
 {
-	if (!task)
-		return HIDEKIT_MARK_NORMAL;
+	struct thread_info *ti;
 	
-	return task->security;
+	if (!task)
+		return TIF_HIDEKIT_NORMAL;
+	
+	ti = task_thread_info(task);
+	return ti->flags & TIF_HIDEKIT_MASK;
 }
 
 /* Check if current process or its parent is marked as suspicious */
 static inline bool is_process_or_parent_suspicious(void)
 {
-	void *current_mark;
-	void *parent_mark;
+	unsigned long current_mark;
+	unsigned long parent_mark;
 	struct task_struct *parent;
 
 	/* Check current process */
 	current_mark = hidekit_get_process_mark(current);
-	if (current_mark == HIDEKIT_MARK_SUSPICIOUS) {
+	if (current_mark == TIF_HIDEKIT_SUSPICIOUS) {
 		return true;
 	}
 
@@ -208,7 +214,7 @@ static inline bool is_process_or_parent_suspicious(void)
 	parent = rcu_dereference(current->real_parent);
 	if (parent) {
 		parent_mark = hidekit_get_process_mark(parent);
-		if (parent_mark == HIDEKIT_MARK_SUSPICIOUS) {
+		if (parent_mark == TIF_HIDEKIT_SUSPICIOUS) {
 			rcu_read_unlock();
 			return true;
 		}
