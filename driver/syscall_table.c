@@ -988,4 +988,58 @@ const struct syscall_evt_pair g_syscall_table[SYSCALL_TABLE_SIZE] = {
 #ifdef __NR_pciconfig_write
 	[__NR_pciconfig_write - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_PCICONFIG_WRITE},
 #endif
+#ifdef __NR_uretprobe
+	[__NR_uretprobe - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_URETPROBE},
+#endif
+#ifdef __NR_file_getattr
+	[__NR_file_getattr - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_FILE_GETATTR},
+#endif
+#ifdef __NR_listmount
+	[__NR_listmount - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_LISTMOUNT},
+#endif
+#ifdef __NR_listxattrat
+	[__NR_listxattrat - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_LISTXATTRAT},
+#endif
+#ifdef __NR_getxattrat
+	[__NR_getxattrat - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_GETXATTRAT},
+#endif
+#ifdef __NR_file_setattr
+	[__NR_file_setattr - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_FILE_SETATTR},
+#endif
+#ifdef __NR_mseal
+	[__NR_mseal - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_MSEAL},
+#endif
+#ifdef __NR_fchroot
+	[__NR_fchroot - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_FCHROOT},
+#endif
+#ifdef __NR_setxattrat
+	[__NR_setxattrat - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_SETXATTRAT},
+#endif
+#ifdef __NR_lsm_list_modules
+	[__NR_lsm_list_modules - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_LSM_LIST_MODULES},
+#endif
+#ifdef __NR_listns
+	[__NR_listns - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_LISTNS},
+#endif
+#ifdef __NR_removexattrat
+	[__NR_removexattrat - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_REMOVEXATTRAT},
+#endif
+#ifdef __NR_statmount
+	[__NR_statmount - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_STATMOUNT},
+#endif
+#ifdef __NR_lsm_get_self_attr
+	[__NR_lsm_get_self_attr - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_LSM_GET_SELF_ATTR},
+#endif
+#ifdef __NR_open_tree_attr
+	[__NR_open_tree_attr - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_OPEN_TREE_ATTR},
+#endif
+#ifdef __NR_uprobe
+	[__NR_uprobe - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_UPROBE},
+#endif
+#ifdef __NR_lsm_set_self_attr
+	[__NR_lsm_set_self_attr - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_LSM_SET_SELF_ATTR},
+#endif
+#ifdef __NR_rseq_slice_yield
+	[__NR_rseq_slice_yield - SYSCALL_TABLE_ID0] = {.ppm_sc = PPM_SC_RSEQ_SLICE_YIELD},
+#endif
 };

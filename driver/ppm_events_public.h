@@ -1901,7 +1901,25 @@ enum extra_event_prog_code
 	PPM_SC_X(VM86, 433) \
 	PPM_SC_X(OLDOLDUNAME, 434) \
 	PPM_SC_X(SUBPAGE_PROT, 435) \
-	PPM_SC_X(PCICONFIG_IOBASE, 436)
+	PPM_SC_X(PCICONFIG_IOBASE, 436)        \
+	PPM_SC_X(FILE_SETATTR, 437)            \
+	PPM_SC_X(STATMOUNT, 438)               \
+	PPM_SC_X(OPEN_TREE_ATTR, 439)          \
+	PPM_SC_X(REMOVEXATTRAT, 440)           \
+	PPM_SC_X(RSEQ_SLICE_YIELD, 441)        \
+	PPM_SC_X(LSM_SET_SELF_ATTR, 442)       \
+	PPM_SC_X(FCHROOT, 443)                 \
+	PPM_SC_X(GETXATTRAT, 444)              \
+	PPM_SC_X(LSM_GET_SELF_ATTR, 445)       \
+	PPM_SC_X(LISTNS, 446)                  \
+	PPM_SC_X(LISTXATTRAT, 447)             \
+	PPM_SC_X(MSEAL, 448)                   \
+	PPM_SC_X(SETXATTRAT, 449)              \
+	PPM_SC_X(LSM_LIST_MODULES, 450)        \
+	PPM_SC_X(URETPROBE, 451)               \
+	PPM_SC_X(FILE_GETATTR, 452)            \
+	PPM_SC_X(LISTMOUNT, 453)               \
+	PPM_SC_X(UPROBE, 454)
 
 typedef enum {
 #define PPM_SC_X(name, value) PPM_SC_##name = (value),
