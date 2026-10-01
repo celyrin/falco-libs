@@ -947,3 +947,51 @@ or GPL2.txt for full copies of the license.
 #ifndef __NR_futex_requeue
 #define __NR_futex_requeue 456
 #endif
+#ifndef __NR_statmount
+#define __NR_statmount 457
+#endif
+#ifndef __NR_listmount
+#define __NR_listmount 458
+#endif
+#ifndef __NR_lsm_get_self_attr
+#define __NR_lsm_get_self_attr 459
+#endif
+#ifndef __NR_lsm_set_self_attr
+#define __NR_lsm_set_self_attr 460
+#endif
+#ifndef __NR_lsm_list_modules
+#define __NR_lsm_list_modules 461
+#endif
+#ifndef __NR_mseal
+#define __NR_mseal 462
+#endif
+#ifndef __NR_setxattrat
+#define __NR_setxattrat 463
+#endif
+#ifndef __NR_getxattrat
+#define __NR_getxattrat 464
+#endif
+#ifndef __NR_listxattrat
+#define __NR_listxattrat 465
+#endif
+#ifndef __NR_removexattrat
+#define __NR_removexattrat 466
+#endif
+#ifndef __NR_open_tree_attr
+#define __NR_open_tree_attr 467
+#endif
+#ifndef __NR_file_getattr
+#define __NR_file_getattr 468
+#endif
+#ifndef __NR_file_setattr
+#define __NR_file_setattr 469
+#endif
+#ifndef __NR_listns
+#define __NR_listns 470
+#endif
+#ifndef __NR_rseq_slice_yield
+#define __NR_rseq_slice_yield 471
+#endif
+#ifndef __NR_fchroot
+#define __NR_fchroot 472
+#endif
